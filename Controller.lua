@@ -39,7 +39,7 @@ function CDMButtonAurasControllerMixin:UpdateFromViewer(viewer)
 end
 
 function CDMButtonAurasControllerMixin:HookViewerItem(item)
-    if item.__CDMBAHooked then
+    if not item.__CDMBAHooked then
         local hook = function () self:UpdateFromItem(item) end
         hooksecurefunc(item, 'RefreshData', hook)
         item.__CDMBAHooked = true
