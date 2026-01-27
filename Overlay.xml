@@ -1,0 +1,28 @@
+<Ui>
+
+  <Script file="Overlay.lua" />
+
+  <Frame name="CDMButtonAurasOverlayTemplate" mixin="CDMButtonAurasOverlayMixin" virtual="true">
+    <Scripts>
+      <OnLoad method="OnLoad" />
+    </Scripts>
+    <Anchors>
+      <Anchor point="CENTER" />
+    </Anchors>
+    <Frames>
+      <Cooldown parentKey="Cooldown" />
+    </Frames>
+    <Layers>
+      <Layer level="ARTWORK">
+        <Texture parentKey="Glow" setAllPoints="true" alphaMode="ADD" file="Interface\Addons\CDMButtonAuras\Textures\Overlay" />
+      </Layer>
+<!--
+      <Layer level="OVERLAY">
+        <FontString parentKey="Timer" />
+        <FontString parentKey="Stacks" />
+      </Layer>
+-->
+    </Layers>
+  </Frame>
+
+</Ui>

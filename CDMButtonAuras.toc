@@ -1,0 +1,9 @@
+## Interface: 120000
+## Title: CDMButtonAuras
+## Version: @project-version@
+## Author: Xodiv-Nagrand
+## Email: mib@post.com
+## SavedVariables: CDMButtonAurasDB
+
+Overlay.xml
+Controller.xml
