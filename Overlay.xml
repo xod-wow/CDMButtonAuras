@@ -16,12 +16,16 @@
       <Layer level="ARTWORK">
         <Texture parentKey="Glow" setAllPoints="true" alphaMode="ADD" file="Interface\Addons\CDMButtonAuras\Textures\Overlay" />
       </Layer>
-<!--
       <Layer level="OVERLAY">
+<!--
         <FontString parentKey="Timer" />
-        <FontString parentKey="Stacks" />
-      </Layer>
 -->
+        <FontString parentKey="Stacks" inherits="NumberFontNormal">
+          <Anchors>
+            <Anchor point="TOPLEFT" x="5" y="-5" />
+          </Anchors>
+        </FontString>
+      </Layer>
     </Layers>
   </Frame>
 

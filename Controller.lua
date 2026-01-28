@@ -1,12 +1,34 @@
 CDMButtonAurasControllerMixin = {}
 
-function CDMButtonAurasControllerMixin:GetActionButton(cdInfo)
-    local spellIDs = { cdInfo.spellID }
-    tAppendAll(spellIDs, cdInfo.linkedSpellIDs)
-    for _, spellID in ipairs(spellIDs) do
-        local button = ActionButtonUtil.GetActionButtonBySpellID(spellID, true)
-        if button then return button end
+local function FindActionButtonForSpellName(name)
+    for _, actionBar in ipairs(ActionButtonUtil.ActionBarButtonNames) do
+        for i = 1, NUM_ACTIONBAR_BUTTONS do
+            local btn = _G[actionBar..i]
+            local _, actionSpellID = GetActionInfo(btn.action)
+            if actionSpellID then
+                local actionSpellName = C_Spell.GetSpellName(actionSpellID)
+                if name == actionSpellName then
+                    return btn
+                end
+            end
+        end
     end
+    for i = 1, NUM_SPECIAL_BUTTONS do
+        -- Stance Bar buttons
+        local stanceBtn = StanceBar.actionButtons[i]
+        local stanceSpellID = select(4, GetShapeshiftFormInfo(stanceBtn:GetID()))
+        if stanceSpellID then
+            local stanceSpellName = C_Spell.GetSpellName(stanceSpellID)
+            if name == stanceSpellName then
+                return stanceBtn
+            end
+        end
+    end
+end
+
+function CDMButtonAurasControllerMixin:GetActionButton(cdInfo)
+    local cdSpellName = C_Spell.GetSpellName(cdInfo.spellID)
+    return FindActionButtonForSpellName(cdSpellName)
 end
 
 function CDMButtonAurasControllerMixin:GetOverlay(actionButton)
