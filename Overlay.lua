@@ -31,8 +31,12 @@ function CDMButtonAurasOverlayMixin:Update(viewerItem, duration)
         if duration then
             self.Cooldown:SetCooldownFromDurationObject(duration, true)
 
-            local stackText = viewerItem.Applications.Applications:GetText()
-            self.Stacks:SetText(stackText)
+            if viewerItem.Applications then
+                local stackText = viewerItem.Applications.Applications:GetText()
+                self.Stacks:SetText(stackText)
+            else
+                self.Stacks:SetText('')
+            end
 
             if viewerItem.auraDataUnit == 'player' then
                 self.Glow:SetVertexColor(0, 0.7, 0, 0.5)
