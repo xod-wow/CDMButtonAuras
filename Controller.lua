@@ -6,7 +6,8 @@ local function FindActionButtonForSpellName(name)
             local btn = _G[actionBar..i]
             local _, actionSpellID = GetActionInfo(btn.action)
             if actionSpellID then
-                local actionSpellName = C_Spell.GetSpellName(actionSpellID)
+                local baseSpellID = C_Spell.GetBaseSpell(actionSpellID)
+                local actionSpellName = C_Spell.GetSpellName(baseSpellID)
                 if name == actionSpellName then
                     return btn
                 end
