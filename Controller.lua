@@ -4,7 +4,7 @@ CDMButtonAurasControllerMixin = {}
 
 -- This is a terrific waste and should be cached
 
-function FindActionButtonForSpellName(name)
+local function FindActionButtonForSpellName(name)
     for _, actionBar in ipairs(ActionButtonUtil.ActionBarButtonNames) do
         for i = 1, NUM_ACTIONBAR_BUTTONS do
             local btn = _G[actionBar..i]
