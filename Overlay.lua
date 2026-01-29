@@ -41,6 +41,9 @@ function CDMButtonAurasOverlayMixin:Update()
         local duration = C_UnitAuras.GetAuraDuration(unit, auraInstanceID)
         if duration then
             self.Cooldown:SetCooldownFromDurationObject(duration, true)
+            self.Cooldown:Show()
+        else
+            self.Cooldown:Hide()
         end
 
         local count = C_UnitAuras.GetAuraApplicationDisplayCount(unit, auraInstanceID)

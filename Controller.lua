@@ -84,6 +84,20 @@ function CDMButtonAurasControllerMixin:HookViewerItem(item)
     end
 end
 
+-- This is super awkward, and a side effect of the way everything is driven
+-- from the viewerItem update hook, which doesn't know anything about
+-- actionbuttons and doesn't handle them changing.
+--
+-- It might be better if the viewer item update hook manages a state table
+-- and then the overlay Update() can look at it to decide if they even
+-- still exist.
+--
+-- Also possibly overlayFrames should be a frame pool, we could release them
+-- all and rescan.
+--
+-- On the other hand it's pretty efficient at the moment. Depends if it ends
+-- up holding back other improvements.
+
 function CDMButtonAurasControllerMixin:RefreshAllOverlays()
     for _, overlay in pairs(self.overlayFrames) do
         overlay:SetViewerItem(nil)
