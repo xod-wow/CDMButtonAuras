@@ -62,7 +62,8 @@ function CDMButtonAurasControllerMixin:UpdateFromItem(item)
         local buttonList = self:GetActionButtonList(cdInfo.spellID)
         for _, button in ipairs(buttonList) do
             local overlay = self:GetOverlay(button)
-            overlay:Update(item, cdInfo)
+            overlay:SetViewerItem(item)
+            overlay:Update()
         end
     end
 end

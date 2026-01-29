@@ -24,28 +24,35 @@ function CDMButtonAurasOverlayMixin:OnLoad()
     self.Cooldown:SetScript('OnCooldownDone', function () self:Update() end)
 end
 
-function CDMButtonAurasOverlayMixin:Update(viewerItem, duration)
-    self:Hide()
-    if viewerItem and viewerItem.auraDataUnit and viewerItem.auraInstanceID then
-        local duration = C_UnitAuras.GetAuraDuration(viewerItem.auraDataUnit, viewerItem.auraInstanceID)
-        if duration then
-            self.Cooldown:SetCooldownFromDurationObject(duration, true)
+function CDMButtonAurasOverlayMixin:SetViewerItem(viewerItem)
+    self.viewerItem = viewerItem
+end
 
-            if viewerItem.Applications then
-                local stackText = viewerItem.Applications.Applications:GetText()
-                self.Stacks:SetText(stackText)
-            else
-                self.Stacks:SetText('')
-            end
+function CDMButtonAurasOverlayMixin:Update()
+    if self.viewerItem == nil then
+        self:Hide()
+        return
+    end
 
-            if viewerItem.auraDataUnit == 'player' then
-                self.Glow:SetVertexColor(0, 0.7, 0, 0.5)
-            else
-                self.Glow:SetVertexColor(1, 0, 0, 0.5)
-            end
-            self.Glow:Show()
+    local unit = self.viewerItem.auraDataUnit
+    local auraInstanceID = self.viewerItem.auraInstanceID
 
-            self:Show()
+    if unit and auraInstanceID then
+        local duration = C_UnitAuras.GetAuraDuration(unit, auraInstanceID)
+        self.Cooldown:SetCooldownFromDurationObject(duration, true)
+
+        local count = C_UnitAuras.GetAuraApplicationDisplayCount(unit, auraInstanceID)
+        self.Stacks:SetText(count)
+
+        if unit == 'player' then
+            self.Glow:SetVertexColor(0, 0.7, 0, 0.5)
+        else
+            self.Glow:SetVertexColor(1, 0, 0, 0.5)
         end
+        self.Glow:Show()
+
+        self:Show()
+    else
+        self:Hide()
     end
 end
