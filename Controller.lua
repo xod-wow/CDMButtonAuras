@@ -1,6 +1,10 @@
+local _, addon = ...
+
 CDMButtonAurasControllerMixin = {}
 
-local function FindActionButtonForSpellName(name)
+-- This is a terrific waste and should be cached
+
+function FindActionButtonForSpellName(name)
     for _, actionBar in ipairs(ActionButtonUtil.ActionBarButtonNames) do
         for i = 1, NUM_ACTIONBAR_BUTTONS do
             local btn = _G[actionBar..i]
@@ -27,9 +31,19 @@ local function FindActionButtonForSpellName(name)
     end
 end
 
-function CDMButtonAurasControllerMixin:GetActionButton(cdInfo)
-    local cdSpellName = C_Spell.GetSpellName(cdInfo.spellID)
-    return FindActionButtonForSpellName(cdSpellName)
+function CDMButtonAurasControllerMixin:GetActionButtonList(spellID)
+    local buttonList = {}
+
+    local cdSpellName = C_Spell.GetSpellName(spellID)
+    local spellNameList = { cdSpellName }
+    tAppendAll(spellNameList, addon.AuraMapByName[cdSpellName] or {})
+    for _, spellName in ipairs(spellNameList) do
+        local button = FindActionButtonForSpellName(spellName)
+        if button then
+            table.insert(buttonList, button)
+        end
+    end
+    return buttonList
 end
 
 function CDMButtonAurasControllerMixin:GetOverlay(actionButton)
@@ -45,14 +59,15 @@ function CDMButtonAurasControllerMixin:UpdateFromItem(item)
 
     local cdInfo = C_CooldownViewer.GetCooldownViewerCooldownInfo(item.cooldownID)
     if cdInfo.spellID then
-        local button = self:GetActionButton(cdInfo)
-        if button then
+        local buttonList = self:GetActionButtonList(cdInfo.spellID)
+        for _, button in ipairs(buttonList) do
             local overlay = self:GetOverlay(button)
             overlay:Update(item, cdInfo)
         end
     end
 end
 
+--[[
 function CDMButtonAurasControllerMixin:UpdateFromViewer(viewer)
     for _, itemFrame in ipairs(viewer:GetItemFrames()) do
         if itemFrame.cooldownID then
@@ -60,6 +75,7 @@ function CDMButtonAurasControllerMixin:UpdateFromViewer(viewer)
         end
     end
 end
+]]
 
 function CDMButtonAurasControllerMixin:HookViewerItem(item)
     if not item.__CDMBAHooked then
@@ -70,10 +86,9 @@ function CDMButtonAurasControllerMixin:HookViewerItem(item)
 end
 
 function CDMButtonAurasControllerMixin:Initialize()
-    --[[
-    BuffBarCooldownViewer:HookScript('OnUpdate', updateHook)
-    BuffIconCooldownViewer:HookScript('OnUpdate', updateHook)
-    ]]
+    addon.InitializeOptions()
+    addon.InitializeGUIOptions()
+
     local hook = function (_, item) self:HookViewerItem(item) end
     hooksecurefunc(BuffBarCooldownViewer, 'OnAcquireItemFrame', hook)
     hooksecurefunc(BuffIconCooldownViewer, 'OnAcquireItemFrame', hook)
@@ -89,3 +104,5 @@ function CDMButtonAurasControllerMixin:OnEvent(event)
         self:Initialize()
     end
 end
+
+_G.CDMBA = addon
