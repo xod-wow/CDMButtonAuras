@@ -87,8 +87,9 @@ end
 
 function CDMButtonAurasControllerMixin:Initialize()
     addon.InitializeOptions()
+    --@debug@
     addon.InitializeGUIOptions()
-
+    --@end-debug@
     local hook = function (_, item) self:HookViewerItem(item) end
     hooksecurefunc(BuffBarCooldownViewer, 'OnAcquireItemFrame', hook)
     hooksecurefunc(BuffIconCooldownViewer, 'OnAcquireItemFrame', hook)

@@ -17,11 +17,15 @@
 ## Category-zhCN: 增益和减益
 ## Category-zhTW: 增益與減益
 
+#@debug@
 embeds.xml
+#@end-debug@
 
 Options.lua
 Overlay.xml
 Controller.xml
 
+#@debug@
 UI\AceGUIWidgets-LBAInputFocus.lua
 UI\Options.lua
+#@end-debug@
