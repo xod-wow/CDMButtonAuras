@@ -68,7 +68,6 @@ function CDMButtonAurasControllerMixin:UpdateFromItem(item)
     end
 end
 
---[[
 function CDMButtonAurasControllerMixin:UpdateFromViewer(viewer)
     for _, itemFrame in ipairs(viewer:GetItemFrames()) do
         if itemFrame.cooldownID then
@@ -76,13 +75,23 @@ function CDMButtonAurasControllerMixin:UpdateFromViewer(viewer)
         end
     end
 end
-]]
 
 function CDMButtonAurasControllerMixin:HookViewerItem(item)
     if not item.__CDMBAHooked then
         local hook = function () self:UpdateFromItem(item) end
         hooksecurefunc(item, 'RefreshData', hook)
         item.__CDMBAHooked = true
+    end
+end
+
+function CDMButtonAurasControllerMixin:RefreshAllOverlays()
+    for _, overlay in pairs(self.overlayFrames) do
+        overlay:SetViewerItem(nil)
+    end
+    self:UpdateFromViewer(BuffBarCooldownViewer)
+    self:UpdateFromViewer(BuffIconCooldownViewer)
+    for _, overlay in pairs(self.overlayFrames) do
+        overlay:Update()
     end
 end
 
@@ -94,6 +103,8 @@ function CDMButtonAurasControllerMixin:Initialize()
     local hook = function (_, item) self:HookViewerItem(item) end
     hooksecurefunc(BuffBarCooldownViewer, 'OnAcquireItemFrame', hook)
     hooksecurefunc(BuffIconCooldownViewer, 'OnAcquireItemFrame', hook)
+
+    self:RegisterEvent('ACTIONBAR_SLOT_CHANGED')
 end
 
 function CDMButtonAurasControllerMixin:OnLoad()
@@ -104,6 +115,8 @@ end
 function CDMButtonAurasControllerMixin:OnEvent(event)
     if event == 'PLAYER_LOGIN' then
         self:Initialize()
+    elseif event == 'ACTIONBAR_SLOT_CHANGED' then
+        self:RefreshAllOverlays()
     end
 end
 
