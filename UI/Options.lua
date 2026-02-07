@@ -211,5 +211,7 @@ function addon.InitializeGUIOptions()
 end
 
 function addon.OpenOptions()
-    Settings.OpenToCategory(category)
+    if not InCombatLockdown() then
+        Settings.OpenToCategory(category)
+    end
 end

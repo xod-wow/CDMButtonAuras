@@ -86,14 +86,14 @@ end
 function addon.SpellString(spellID, spellName)
     spellName = NORMAL_FONT_COLOR:WrapTextInColorCode(spellName)
     if spellID then
-        return format("%s (%d)", spellName, spellID)
+        return string.format("%s (%d)", spellName, spellID)
     else
         return spellName
     end
 end
 
 function addon.AuraMapString(auraID, auraName, abilityID, abilityName)
-    return format(
+    return string.format(
                 "%s %s %s",
                 addon.SpellString(auraID, auraName),
                 L["on"],
