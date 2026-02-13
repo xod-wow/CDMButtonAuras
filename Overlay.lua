@@ -16,6 +16,9 @@ function CDMButtonAurasOverlayMixin:OnLoad()
         self:SetFrameLevel(parent.cooldown:GetFrameLevel() + 1)
     end
 
+    -- Using Cooldown frame here only for the Abbrev capability. Once
+    -- Blizzard provides the promised secret-safe SecondsFormatter then
+    -- it can be changed to a FontString.
     self.Cooldown:SetPoint("TOPLEFT", parent.icon, "LEFT", 5, 0)
     self.Cooldown:SetPoint("BOTTOMRIGHT", parent.icon, "BOTTOM", 0, 3)
     self.Cooldown:SetDrawSwipe(false)
